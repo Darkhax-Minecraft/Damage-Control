@@ -32,7 +32,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 group = "net.darkhax.damagecontrol"
-archivesBaseName = "LootTableTweaker"
+archivesBaseName = "DamageControl"
 version = getVersionFromJava(file("src/main/java/net/darkhax/damagecontrol/libs/Constants.java"))
 
 //Defines the MC environment information.
