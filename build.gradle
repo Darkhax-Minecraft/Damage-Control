@@ -184,17 +184,10 @@ curseforge {
         id = System.getenv("projectId") ? System.getenv("projectId") : "0";
         
         releaseType = "alpha";
-        changelog = "All changes can be found here: https://github.com/Darkhax-Minecraft/LootTableTweaker/commits/master";
+        changelog = "All changes can be found here: https://github.com/Darkhax-Minecraft/Damage-Control/commits/master";
 
         addGameVersion "1.10.2"
         
-        //Adds main jar, deobf jar, source jar, and javadoc jar to the upload.
-        mainArtifact(jar) {
-          
-            relations {
-                
-            }
-        }
         
         addArtifact(deobfJar)
         addArtifact(sourcesJar)
