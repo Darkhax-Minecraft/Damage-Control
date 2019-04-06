@@ -19,6 +19,7 @@ public class ConfigurationHandler {
     private static final Map<DamageSource, Float> damageModifiers = new HashMap<>();
 
     public static float healthModifier = 1f;
+    public static boolean healthAllowed = true;
 
     /**
      * An instance of the Configuration object being used.
@@ -49,6 +50,7 @@ public class ConfigurationHandler {
 
         final String category = "GLOBAL_MODIFIERS";
         healthModifier = config.getFloat("GlobalMaxHealthModifier", category, 1f, 0f, 1024f, "The global max health modifier.");
+        healthAllowed = config.getBoolean("AllowHealthModification", category, true, "Whether to allow health modification by the mod. If false, health modifiers will not be applied. Useful for compatibility reasons");
 
         syncConfig();
     }
@@ -88,7 +90,7 @@ public class ConfigurationHandler {
             return entityBaseHealth.get(entityId);
         }
 
-        final float configAmount = config.getFloat("MaxHealth_" + entityId, "MAX_HEALTH", (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue(), 0f, (float) ((RangedAttribute) SharedMonsterAttributes.MAX_HEALTH).maximumValue, "The maximum health value for " + entityId);
+        final float configAmount = config.getFloat("MaxHealth_" + entityId, "MAX_HEALTH", (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue(), -1f, (float) ((RangedAttribute) SharedMonsterAttributes.MAX_HEALTH).maximumValue, "The maximum health value for " + entityId + ". Negative values deactivate health modification for this entity.");
         entityBaseHealth.put(entityId, configAmount);
 
         syncConfig();
