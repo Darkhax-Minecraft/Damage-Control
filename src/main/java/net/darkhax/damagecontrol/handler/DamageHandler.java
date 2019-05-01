@@ -15,35 +15,40 @@ public class DamageHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldLoad (WorldEvent.Load event) {
-
-        for (final ResourceLocation entityId : EntityList.ENTITY_EGGS.keySet()) {
-
-            final Entity entity = EntityList.createEntityByIDFromName(entityId, event.getWorld());
-
-            if (entity instanceof EntityLivingBase) {
-
-                ConfigurationHandler.getMaxHealth(entityId, (EntityLivingBase) entity);
-            }
-        }
+    	if (ConfigurationHandler.healthAllowed) {
+	        for (final ResourceLocation entityId : EntityList.ENTITY_EGGS.keySet()) {
+	
+	            final Entity entity = EntityList.createEntityByIDFromName(entityId, event.getWorld());
+	
+	            if (entity instanceof EntityLivingBase) {
+	
+	                ConfigurationHandler.getMaxHealth(entityId, (EntityLivingBase) entity);
+	            }
+	        }
+	    }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onEntityJoinWorld (EntityJoinWorldEvent event) {
-
-        if (event.getEntity() instanceof EntityLivingBase) {
-
-            final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
-            final float currentMaxHealth = (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
-            final float modifiedMaxHealth = ConfigurationHandler.getMaxHealth(entity) * ConfigurationHandler.healthModifier;
-
-            if (currentMaxHealth != modifiedMaxHealth) {
-                entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(modifiedMaxHealth);
-            }
-
-            if (entity.getHealth() == currentMaxHealth) {
-                entity.setHealth(modifiedMaxHealth);
-            }
-        }
+    	if (ConfigurationHandler.healthAllowed) {
+	        if (event.getEntity() instanceof EntityLivingBase) {
+	
+	            final EntityLivingBase entity = (EntityLivingBase) event.getEntity();
+	            final float modifiedMaxHealth = ConfigurationHandler.getMaxHealth(entity) * ConfigurationHandler.healthModifier;
+	            
+	            if (modifiedMaxHealth >= 0.0f) {
+	            	final float currentMaxHealth = (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
+	            	
+		            if (currentMaxHealth != modifiedMaxHealth) {
+		                entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(modifiedMaxHealth);
+		            }
+		
+		            if (entity.getHealth() == currentMaxHealth) {
+		                entity.setHealth(modifiedMaxHealth);
+		            }
+	            }
+	        }
+	    }
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
